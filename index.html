@@ -1,14 +1,13 @@
 <!doctype html>
-<html lang="en">
-<head>
+<html lang="en"><head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Waiting for the Walk Signal: How Long NYC 311 Pedestrian-Signal Reports Remain Open, by Neighborhood</title>
   <meta name="description" content="An investigation of administrative closure times for NYC pedestrian-signal complaints.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Carlito:ital@0;1&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Carlito:ital@0;1&amp;display=swap" rel="stylesheet">
+  <script type="module" src="https://public.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js"></script>
   <link rel="stylesheet" href="interactive.css">
   <style>
     :root {
@@ -273,24 +272,9 @@
       </section>
 
       <figure>
-        <div class="interactive-figure" id="map-figure">
-          <div class="figure-heading">
-            <div>
-              <h3>Closure times vary sharply across neighborhoods</h3>
-              <p>Darker areas had longer median administrative closure times. The comparison includes neighborhoods with at least 20 matched requests.</p>
-            </div>
-            <div class="map-controls" aria-label="Map controls">
-              <button type="button" data-map-action="in" aria-label="Zoom in">+</button>
-              <button type="button" data-map-action="out" aria-label="Zoom out">−</button>
-              <button type="button" data-map-action="reset">Reset</button>
-            </div>
-          </div>
-          <div class="map-stage">
-            <svg id="neighborhood-map" role="img" aria-labelledby="map-title map-description"></svg>
-            <div class="map-legend" aria-hidden="true"><span>Faster</span><i></i><span>Longer</span></div>
-            <p class="interaction-note">Scroll to zoom. Drag to move. Select a neighborhood for details.</p>
-            <div class="viz-tooltip" id="map-tooltip" role="status" aria-live="polite"></div>
-          </div>
+        <div class="interactive-figure tableau-figure" id="map-figure">
+          <tableau-viz class="tableau-embed tableau-embed--map" src="https://public.tableau.com/views/WaitingfortheWalkSignal_blue-final/NeighborhoodClosureMap" width="100%" height="650px" device="desktop" toolbar="hidden" hide-tabs>
+          </tableau-viz>
         </div>
         <figcaption><span class="caption-label">Figure 1.</span> Median administrative closure time for 2025 pedestrian-signal complaints by neighborhood. The comparison includes areas with at least 20 matched requests. Hover, tap, or focus on an area for its city-defined name and complaint count.</figcaption>
       </figure>
@@ -302,24 +286,9 @@
       </section>
 
       <figure>
-        <div class="interactive-figure" id="bar-figure">
-          <div class="figure-heading">
-            <div>
-              <h3>Brownsville stands apart in median closure time</h3>
-              <p>Ranked among areas with at least 20 matched requests.</p>
-            </div>
-            <label class="chart-choice">Show
-              <select id="bar-count" aria-label="Number of neighborhoods shown">
-                <option value="15">15 slowest</option>
-                <option value="30">30 slowest</option>
-                <option value="83">all 83</option>
-              </select>
-            </label>
-          </div>
-          <div class="bar-scroll" id="bar-scroll">
-            <svg id="ranked-bars" role="img" aria-labelledby="bars-title bars-description"></svg>
-          </div>
-          <div class="viz-tooltip" id="bar-tooltip" role="status" aria-live="polite"></div>
+        <div class="interactive-figure tableau-figure" id="bar-figure">
+          <tableau-viz class="tableau-embed tableau-embed--ranking" src="https://public.tableau.com/views/WaitingfortheWalkSignal_blue-final/NeighborhoodRanking" width="100%" height="620px" device="desktop" toolbar="hidden" hide-tabs>
+          </tableau-viz>
         </div>
         <figcaption><span class="caption-label">Figure 2.</span> Neighborhood areas ranked by median administrative closure time. Values are hours. Hover, tap, or focus on a bar for the complaint count and the city’s full official area name.</figcaption>
       </figure>
@@ -331,14 +300,9 @@
       </section>
 
       <figure>
-        <div class="interactive-figure" id="duration-figure">
-          <div class="figure-heading">
-            <div>
-              <h3>Most cases closed within hours—but one in ten took more than five days</h3>
-              <p>Share of all 4,842 pedestrian-signal requests, grouped by administrative closure time.</p>
-            </div>
-          </div>
-          <svg id="duration-bars" role="img" aria-labelledby="duration-title duration-description"></svg>
+        <div class="interactive-figure tableau-figure" id="duration-figure">
+          <tableau-viz class="tableau-embed tableau-embed--distribution" src="https://public.tableau.com/views/WaitingfortheWalkSignal_blue-final/DistributionofClosureTimes" width="100%" height="480px" device="desktop" toolbar="hidden" hide-tabs>
+          </tableau-viz>
         </div>
         <figcaption><span class="caption-label">Figure 3.</span> Share of 2025 pedestrian-signal requests in each closure-time range. Percentages may not total 100 because of rounding.</figcaption>
       </figure>
@@ -363,7 +327,7 @@
     </article>
   </main>
 
-  <footer>Course project mockup · Local preview only</footer>
-  <script src="interactive.js"></script>
-</body>
-</html>
+  <footer>Data visualization project · Kelsea Scarlett</footer>
+
+
+</body></html>
