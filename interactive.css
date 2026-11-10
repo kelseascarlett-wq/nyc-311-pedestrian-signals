@@ -133,7 +133,7 @@
 .bar-value { fill: var(--ink); font: 11px var(--sans); font-variant-numeric: tabular-nums; }
 .axis-title { fill: var(--muted); font: 11px var(--sans); }
 .duration-label { fill: var(--ink); font: 12px var(--sans); }
-.duration-mark { fill: var(--blue); opacity: .62; }
+.duration-mark { fill: var(--blue); opacity: 1; }
 .duration-mark.slow { opacity: 1; }
 .duration-value { fill: var(--ink); font: 11px var(--sans); font-variant-numeric: tabular-nums; }
 
