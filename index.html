@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Waiting for the Walk Signal: How Long NYC 311 Pedestrian-Signal Reports Remain Open, by Neighborhood</title>
+  <meta name="description" content="An investigation of administrative closure times for NYC pedestrian-signal complaints.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Carlito:ital@0;1&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <link rel="stylesheet" href="interactive.css">
+  <style>
+    :root {
+      --ink: #1d2328;
+      --muted: #626b72;
+      --line: #d9dee1;
+      --paper: #fff;
+      --blue: #416b96;
+      --blue-pale: #edf2f6;
+      --display: "Cambria Math", Cambria, "Times New Roman", serif;
+      --sans: Calibri, Carlito, "Segoe UI", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: var(--sans);
+      font-size: 18px;
+      line-height: 1.64;
+      text-rendering: optimizeLegibility;
+      font-variant-numeric: proportional-nums;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--line);
+      font-family: var(--sans);
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .site-header__inner {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 18px 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      color: var(--muted);
+    }
+
+    main { overflow: hidden; }
+
+    .article-header {
+      width: min(920px, calc(100% - 40px));
+      margin-inline: auto;
+    }
+
+    .prose {
+      width: min(720px, calc(100% - 40px));
+      margin-inline: auto;
+    }
+
+    .article-header { padding: 92px 0 56px; }
+
+    .eyebrow {
+      margin: 0 0 20px;
+      color: var(--blue);
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-family: var(--display);
+      font-weight: 400;
+      line-height: 1.12;
+    }
+
+    h1 {
+      max-width: 850px;
+      font-size: clamp(48px, 7vw, 78px);
+      letter-spacing: -.026em;
+    }
+
+    .dek {
+      max-width: 740px;
+      margin: 28px 0 0;
+      color: #414a51;
+      font-size: 22px;
+      line-height: 1.48;
+    }
+
+    .byline {
+      margin: 30px 0 0;
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 13px;
+    }
+
+    .rule {
+      width: min(920px, calc(100% - 40px));
+      margin: 0 auto 54px;
+      border: 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .prose p { margin: 0 0 1.25em; }
+
+    .prose h2 {
+      margin: 2.8em 0 .7em;
+      font-size: 36px;
+      letter-spacing: -.014em;
+    }
+
+    .prose h3 {
+      margin: 2.2em 0 .6em;
+      font-size: 25px;
+    }
+
+    .question {
+      margin: 42px 0;
+      padding: 2px 0 2px 28px;
+      border-left: 3px solid var(--blue);
+      color: #303b44;
+      font-family: var(--display);
+      font-size: 25px;
+      font-style: italic;
+      line-height: 1.48;
+    }
+
+    .facts {
+      margin: 46px 0 58px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .fact { padding: 22px 18px 20px 0; }
+    .fact + .fact { padding-left: 20px; border-left: 1px solid var(--line); }
+
+    .fact__value {
+      display: block;
+      color: var(--blue);
+      font-family: var(--display);
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .fact__label {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    figure {
+      width: min(1080px, calc(100% - 32px));
+      margin: 64px auto 70px;
+    }
+
+    figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #fff;
+      border: 1px solid #e4e6e7;
+    }
+
+    figcaption {
+      max-width: 800px;
+      margin: 14px auto 0;
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .caption-label { color: var(--ink); }
+
+    .sources {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    a { color: #315f8d; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+
+    footer {
+      width: min(920px, calc(100% - 40px));
+      margin: 72px auto 0;
+      padding: 24px 0 48px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 12px;
+    }
+
+    @media (max-width: 680px) {
+      body { font-size: 17px; }
+      .article-header { padding-top: 56px; }
+      .site-header__inner { display: block; }
+      .site-header__inner span:last-child { display: none; }
+      .facts { grid-template-columns: 1fr; }
+      .fact + .fact { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+      figure { width: 100%; }
+      figure img { border-left: 0; border-right: 0; }
+      figcaption { padding-inline: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <span>NYC 311 · Data visualization</span>
+      <span>Pedestrian signals · 2025</span>
+    </div>
+  </header>
+
+  <main>
+    <header class="article-header">
+      <p class="eyebrow">An exploratory investigation</p>
+      <h1>Waiting for the walk signal</h1>
+      <p class="dek">How long NYC 311 pedestrian-signal reports remain open, by neighborhood.</p>
+      <p class="byline">By Kelsea Scarlett · October 2026</p>
+    </header>
+
+    <hr class="rule">
+
+    <article>
+      <section class="prose">
+        <p>I began with a suspicion that a closed 311 complaint might conceal an unfixed problem. My roommate, a lifelong New Yorker who trusts 311, challenged that assumption and suggested a more precise question.</p>
+
+        <p class="question">How long do pedestrian-signal reports remain open in New York City’s 311 system, and how does the typical closure time vary across neighborhoods?</p>
+
+        <p>Pedestrians, disability advocates, neighborhood organizations, and journalists could use the results to identify patterns worth investigating.</p>
+
+        <h2>The data</h2>
+
+        <p>I used NYC Open Data’s <em>311 Service Requests from 2020 to Present</em>, published by NYC311 from reports submitted by the public. Each row is one request—not necessarily one broken signal, repair, or unique intersection. I selected 2025 requests assigned to DOT with the complaint type <em>Traffic Signal Condition</em> and descriptor <em>Pedestrian Signal</em>.</p>
+
+        <p>My principal calculated variable was closure time: Closed Date minus Created Date. I used the median for geographic comparisons because a small number of extremely long cases pulled the average upward.</p>
+
+        <div class="facts" aria-label="Dataset summary">
+          <div class="fact"><span class="fact__value">4,842</span><span class="fact__label">filtered pedestrian-signal requests</span></div>
+          <div class="fact"><span class="fact__value">4,604</span><span class="fact__label">requests matched to a neighborhood</span></div>
+          <div class="fact"><span class="fact__value">83</span><span class="fact__label">neighborhoods with at least 20 requests</span></div>
+        </div>
+
+        <p>To compare places consistently, I used neighborhood-sized areas drawn by NYC’s Department of City Planning. The city calls them Neighborhood Tabulation Areas, or NTAs. The borders are imperfect, but they provide one consistent geography across all five boroughs.</p>
+
+        <p>I compared only areas with at least 20 requests so that a handful of cases would not distort the ranking.</p>
+
+        <h2>Where closure times differ</h2>
+      </section>
+
+      <figure>
+        <div class="interactive-figure" id="map-figure">
+          <div class="figure-heading">
+            <div>
+              <h3>Closure times vary sharply across neighborhoods</h3>
+              <p>Darker areas had longer median administrative closure times. The comparison includes neighborhoods with at least 20 matched requests.</p>
+            </div>
+            <div class="map-controls" aria-label="Map controls">
+              <button type="button" data-map-action="in" aria-label="Zoom in">+</button>
+              <button type="button" data-map-action="out" aria-label="Zoom out">−</button>
+              <button type="button" data-map-action="reset">Reset</button>
+            </div>
+          </div>
+          <div class="map-stage">
+            <svg id="neighborhood-map" role="img" aria-labelledby="map-title map-description"></svg>
+            <div class="map-legend" aria-hidden="true"><span>Faster</span><i></i><span>Longer</span></div>
+            <p class="interaction-note">Scroll to zoom. Drag to move. Select a neighborhood for details.</p>
+            <div class="viz-tooltip" id="map-tooltip" role="status" aria-live="polite"></div>
+          </div>
+        </div>
+        <figcaption><span class="caption-label">Figure 1.</span> Median administrative closure time for 2025 pedestrian-signal complaints by neighborhood. The comparison includes areas with at least 20 matched requests. Hover, tap, or focus on an area for its city-defined name and complaint count.</figcaption>
+      </figure>
+
+      <section class="prose">
+        <p>Recorded closure times varied across the city. The map shows where the differences were concentrated; the ranked bars make their magnitude easier to compare.</p>
+
+        <h2>Which neighborhoods stand apart</h2>
+      </section>
+
+      <figure>
+        <div class="interactive-figure" id="bar-figure">
+          <div class="figure-heading">
+            <div>
+              <h3>Brownsville stands apart in median closure time</h3>
+              <p>Ranked among areas with at least 20 matched requests.</p>
+            </div>
+            <label class="chart-choice">Show
+              <select id="bar-count" aria-label="Number of neighborhoods shown">
+                <option value="15">15 slowest</option>
+                <option value="30">30 slowest</option>
+                <option value="83">all 83</option>
+              </select>
+            </label>
+          </div>
+          <div class="bar-scroll" id="bar-scroll">
+            <svg id="ranked-bars" role="img" aria-labelledby="bars-title bars-description"></svg>
+          </div>
+          <div class="viz-tooltip" id="bar-tooltip" role="status" aria-live="polite"></div>
+        </div>
+        <figcaption><span class="caption-label">Figure 2.</span> Neighborhood areas ranked by median administrative closure time. Values are hours. Hover, tap, or focus on a bar for the complaint count and the city’s full official area name.</figcaption>
+      </figure>
+
+      <section class="prose">
+        <p>The citywide median administrative closure time was approximately 2.4 hours, but neighborhood medians varied sharply. Brownsville had the longest median at 53.6 hours across 26 complaints. It was followed by East Flatbush-Farragut at 29.6 hours across 22 complaints and Ridgewood at 29.4 hours across 23 complaints. These are differences in the timing of recorded closures; by themselves, they do not demonstrate unequal repair service or intentional preferential treatment.</p>
+
+        <h2>How long individual cases remained open</h2>
+      </section>
+
+      <figure>
+        <div class="interactive-figure" id="duration-figure">
+          <div class="figure-heading">
+            <div>
+              <h3>Most cases closed within hours—but one in ten took more than five days</h3>
+              <p>Share of all 4,842 pedestrian-signal requests, grouped by administrative closure time.</p>
+            </div>
+          </div>
+          <svg id="duration-bars" role="img" aria-labelledby="duration-title duration-description"></svg>
+        </div>
+        <figcaption><span class="caption-label">Figure 3.</span> Share of 2025 pedestrian-signal requests in each closure-time range. Percentages may not total 100 because of rounding.</figcaption>
+      </figure>
+
+      <section class="prose">
+        <p>The third chart shows the full distribution behind the averages. More than half of requests were marked closed within three hours, while 10.2 percent took more than five days—including 2.9 percent that took more than 30 days. Those older cases raised the mean to about 84 hours even though the median was 2.4 hours.</p>
+
+        <h2>What the data cannot tell us</h2>
+
+        <p>A 311 Closed Date marks when the city closed its record, not when a signal was inspected or repaired. The dataset contains no inspection finding or repair outcome. I also excluded 238 requests that lacked enough location information to assign a neighborhood.</p>
+
+        <p>Reporting behavior, urgency, duplicates, contractor workflow, and data entry could affect the pattern. The neighborhood charts combine many intersections into one number; the original street fields still allow particular intersections to be examined.</p>
+
+        <h2>Conclusion</h2>
+
+        <p>NYC marked the typical request closed within hours, but the timing varied by neighborhood and a minority remained open for days or months. This analysis establishes where recorded closures differed, not why.</p>
+
+        <p>One concrete lead is Rockaway Avenue and Sutter Avenue in Brownsville, where two 2025 requests remained open for approximately 103 and 124 days. The next step is to request DOT’s inspection, contractor, and repair records for those cases and compare their dates with the 311 record. A broader public-safety study could then compare complaint locations with police-reported crashes to ask whether intersections with repeated or long-open signal complaints also recorded pedestrian injuries. A geographic match could identify specific intersections for further investigation.</p>
+
+        <p class="sources">Sources: <a href="https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2020-to-Present/erm2-nwe9/about_data">NYC Open Data, 311 Service Requests from 2020 to Present</a>; <a href="https://data.cityofnewyork.us/City-Government/2020-Neighborhood-Tabulation-Areas-NTAs-/9nt8-h7nd">NYC Department of City Planning, 2020 Neighborhood Tabulation Areas</a>; <a href="https://portal.311.nyc.gov/article/?kanumber=KA-01047">NYC311, Pedestrian Signal Complaint or Request</a>.</p>
+      </section>
+    </article>
+  </main>
+
+  <footer>Course project mockup · Local preview only</footer>
+  <script src="interactive.js"></script>
+</body>
+</html>

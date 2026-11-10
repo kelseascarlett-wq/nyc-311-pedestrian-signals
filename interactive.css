@@ -1,0 +1,164 @@
+.interactive-figure {
+  position: relative;
+  padding: 24px 0 8px;
+  border-top: 1px solid var(--line);
+  background: transparent;
+  font-family: var(--sans);
+}
+
+.figure-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 22px 16px;
+}
+
+.figure-heading h3 {
+  font-family: var(--display);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.figure-heading p {
+  max-width: 650px;
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.map-controls {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 5px;
+}
+
+.map-controls button,
+.chart-choice select {
+  min-height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font: 500 12px/1 var(--sans);
+}
+
+.map-controls button { min-width: 34px; padding: 0 10px; }
+.map-controls button:hover,
+.map-controls button:focus-visible,
+.chart-choice select:hover,
+.chart-choice select:focus-visible { border-color: var(--blue); }
+
+.chart-choice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.chart-choice select { padding: 0 28px 0 9px; }
+
+.map-stage { position: relative; min-height: 520px; overflow: hidden; }
+
+#neighborhood-map {
+  display: block;
+  width: 100%;
+  height: 520px;
+  touch-action: none;
+}
+
+.borough-outline {
+  fill: #f2f1ed;
+  stroke: #fff;
+  stroke-width: .8px;
+  vector-effect: non-scaling-stroke;
+}
+
+.neighborhood-area {
+  stroke: rgba(255,255,255,.88);
+  stroke-width: .7px;
+  vector-effect: non-scaling-stroke;
+  transition: opacity 120ms ease;
+}
+
+.neighborhood-area:hover,
+.neighborhood-area:focus { stroke: var(--ink); stroke-width: 1.5px; outline: none; }
+
+.map-legend {
+  position: absolute;
+  left: 22px;
+  bottom: 38px;
+  display: grid;
+  grid-template-columns: auto 150px auto;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.map-legend i {
+  display: block;
+  height: 8px;
+  background: linear-gradient(90deg, #dbe8f2, #7fa6c8, #244f7a);
+}
+
+.interaction-note {
+  position: absolute;
+  right: 22px;
+  bottom: 24px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.bar-scroll {
+  max-height: 650px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: #bdc4c9 transparent;
+}
+
+#ranked-bars { display: block; width: 100%; }
+#duration-bars { display: block; width: 100%; }
+.bar-grid line { stroke: #e7e9e9; stroke-width: 1; }
+.bar-axis text { fill: var(--muted); font: 11px var(--sans); }
+.bar-axis path, .bar-axis line { display: none; }
+.bar-mark { fill: var(--blue); }
+.bar-mark:hover, .bar-mark:focus { fill: #244f7a; outline: none; }
+.bar-label { fill: var(--ink); font: 12px var(--sans); }
+.bar-value { fill: var(--ink); font: 11px var(--sans); font-variant-numeric: tabular-nums; }
+.axis-title { fill: var(--muted); font: 11px var(--sans); }
+.duration-label { fill: var(--ink); font: 12px var(--sans); }
+.duration-mark { fill: var(--blue); opacity: .62; }
+.duration-mark.slow { opacity: 1; }
+.duration-value { fill: var(--ink); font: 11px var(--sans); font-variant-numeric: tabular-nums; }
+
+.viz-tooltip {
+  position: absolute;
+  z-index: 5;
+  display: none;
+  max-width: 270px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  background: rgba(255,255,255,.985);
+  box-shadow: 0 4px 14px rgba(29,35,40,.08);
+  font: 12px/1.45 var(--sans);
+  pointer-events: none;
+}
+
+.viz-tooltip.is-visible { display: block; }
+.viz-tooltip .tip-name { display: block; margin-bottom: 3px; font-weight: 500; }
+.viz-tooltip .tip-official { display: block; margin-top: 5px; color: var(--muted); font-size: 11px; }
+
+@media (max-width: 680px) {
+  .figure-heading { display: block; padding-inline: 18px; }
+  .map-controls, .chart-choice { margin-top: 14px; }
+  .map-stage, #neighborhood-map { min-height: 440px; height: 440px; }
+  .interaction-note { display: none; }
+  .map-legend { left: 18px; bottom: 18px; grid-template-columns: auto 100px auto; }
+}
