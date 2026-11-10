@@ -13,7 +13,7 @@ How long do pedestrian-signal reports remain open in New York City's 311 system,
 - A distribution of individual request closure times
 - Methodological limitations and proposed next steps
 
-The project is a static website. D3 renders the visualizations in the visitor's browser from the included GeoJSON and JSON files; it does not require a database or server-side application.
+The project is a static website that embeds the published Tableau Public worksheets. Tableau Public is the authoritative visualization source, so future workbook updates flow into the article without maintaining a second chart implementation.
 
 ## Data and interpretation
 
@@ -23,7 +23,7 @@ A 311 `Closed Date` records when the city closed the administrative record. It d
 
 ## Run locally
 
-Because the project loads local JSON and GeoJSON files, view it through a local web server rather than opening `index.html` directly:
+To preview the site locally, start a small web server:
 
 ```bash
 python3 -m http.server 8000
@@ -36,11 +36,9 @@ Then visit `http://localhost:8000/`.
 ```text
 index.html
 interactive.css
-interactive.js
-assets/
-  neighborhoods.geojson
-  neighborhood-summary.json
 ```
+
+`interactive.js` and `assets/` contain the earlier D3 prototype and are retained for reference; the published page does not load them.
 
 ## Sources
 
